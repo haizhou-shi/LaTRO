@@ -91,21 +91,21 @@ data_collator = None
 if tokenizer.pad_token is None:
     set_pad_token(tokenizer)
 
-match tokenizer.name_or_path:
-    case "microsoft/Phi-3.5-mini-instruct":
+match tokenizer.name_or_path.split("/")[-1]:
+    case "Phi-3.5-mini-instruct":
         tokenizer.eos_token = "<|end|>"
         data_collator = DataCollatorForCompletionOnlyLM(
             instruction_template="<|user|>",
             response_template="<|assistant|>",
             tokenizer=tokenizer,
         )
-    case "meta-llama/Meta-Llama-3.1-8B-Instruct":
+    case "Meta-Llama-3.1-8B-Instruct":
         data_collator = DataCollatorForCompletionOnlyLM(
             instruction_template="<|start_header_id|>user<|end_header_id|>",
             response_template="<|start_header_id|>assistant<|end_header_id|>",
             tokenizer=tokenizer,
         )
-    case "mistralai/Mistral-7B-Instruct-v0.3":
+    case "Mistral-7B-Instruct-v0.3":
         data_collator = DataCollatorForCompletionOnlyLM(
             instruction_template="[INST]",
             response_template="[/INST]",

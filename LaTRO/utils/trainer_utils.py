@@ -15,8 +15,8 @@ def get_end_token(tokenizer: AutoTokenizer) -> str:
     """
     Get the real end token of an instructed model.
     """
-    match tokenizer.name_or_path:
-        case "microsoft/Phi-3.5-mini-instruct":
+    match tokenizer.name_or_path.split("/")[-1]:
+        case "Phi-3.5-mini-instruct":
             return "<|end|>"
         case _:
             return tokenizer.eos_token
@@ -26,11 +26,11 @@ def set_pad_token(tokenizer: AutoTokenizer):
     """
     Set the pad token other than EOS of a tokenizer if it is not set.
     """
-    match tokenizer.name_or_path:
+    match tokenizer.name_or_path.split("/")[-1]:
         # NOTE: DO NOT set tokenizer.pad_token = tokenizer.eos_token if the tokenizer doesn't have a pad token
-        case "meta-llama/Meta-Llama-3-8B-Instruct" | "meta-llama/Meta-Llama-3.1-8B-Instruct":
+        case "Meta-Llama-3-8B-Instruct" | "Meta-Llama-3.1-8B-Instruct":
             tokenizer.add_special_tokens({"pad_token": "<|end_of_text|>"})
-        case "mistralai/Mistral-7B-Instruct-v0.3":
+        case "Mistral-7B-Instruct-v0.3":
             tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
         case _:
             raise ValueError(
